@@ -35,6 +35,12 @@ def add_task_to_store(session: Session, task_gid: str) -> None:
     session.commit()
 
 
-def is_task_completed_today(due_on: str):
+def is_task_completed_today(due_on: str, start_on: str):
     """Return True if due_on(task_completed_deadline equal to today else return False"""
-    return due_on == datetime.datetime.today().strftime("%Y-%m-%d")
+    if start_on is None:
+        return due_on == datetime.datetime.today().strftime("%Y-%m-%d")
+    return (
+        datetime.datetime.strptime(start_on, "%Y-%m-%d")
+        < datetime.datetime.today()
+        <= datetime.datetime.strptime(f"{due_on} 23:59:59", "%Y-%m-%d %H:%M:%S")
+    )

@@ -26,7 +26,7 @@ class Bot:
                 workspace_gid=workspace["gid"],
                 completed=True,
                 params={"followers.any": self.me["gid"]},
-                opt_fields=["name", "due_on", "memberships.project"],
+                opt_fields=["name", "due_on", "start_on", "memberships.project"],
             )
             tasks_lists.append(workspace_task)
 

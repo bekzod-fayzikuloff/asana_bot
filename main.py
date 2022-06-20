@@ -36,8 +36,9 @@ def main() -> None:
                 continue
 
             task_due_on = task.get("due_on", None)
-            if task_due_on is None or not is_task_completed_today(task_due_on):
+            start_on = task.get("start_on", None)
 
+            if task_due_on is None or not is_task_completed_today(task_due_on, start_on):
                 try:
                     assigner = bot.get_task_assignee(task["gid"])["assignee"].copy()
                     bot.change_task_state(task)
