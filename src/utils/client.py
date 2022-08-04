@@ -1,4 +1,6 @@
 import datetime
+import json
+import os
 from typing import Generator
 
 from src.db.session import Session
@@ -28,6 +30,10 @@ def get_all_tasks_gid(session: Session) -> Generator:
     return (task.id for task in all_tasks)
 
 
+def get_task_by_gid(gid: str, session: Session):
+    return session.query(Task).filter(Task.id == gid).first()
+
+
 def add_task_to_store(session: Session, task_gid: str) -> None:
     """Adding task record to Database"""
     task = Task(id=task_gid)
@@ -44,3 +50,22 @@ def is_task_completed_today(due_on: str, start_on: str):
         < datetime.datetime.today()
         <= datetime.datetime.strptime(f"{due_on} 23:59:59", "%Y-%m-%d %H:%M:%S")
     )
+
+
+def check_last_polling_session(file_path: str):
+    file_exist = os.path.exists(file_path)
+    if file_exist:
+        with open(file_path, "r") as file:
+            try:
+                last_check = json.load(file)
+            except json.decoder.JSONDecodeError:
+                return False
+
+        last_check_date = last_check.get("last_check")
+        if last_check_date is not None:
+            check_date = last_check_date.split(" ")[0]
+            return check_date == datetime.datetime.today().date().strftime("%Y-%m-%d")
+
+        return False
+
+    return False

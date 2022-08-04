@@ -8,7 +8,6 @@ def get_session() -> Generator:
     """yield Session instance in context manager for provide closing connection"""
     with Session() as session:
         yield session
-        session.commit()
 
 
 def init_db() -> None:
