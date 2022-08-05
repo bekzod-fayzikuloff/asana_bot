@@ -26,11 +26,13 @@ def is_marked_story(client: dict, story: dict) -> bool:
 
 
 def get_all_tasks_gid(session: Session) -> Generator:
+    """Getting Task entity all instances from session"""
     all_tasks = session.query(Task).all()
     return (task.id for task in all_tasks)
 
 
-def get_task_by_gid(gid: str, session: Session):
+def get_task_by_gid(gid: str, session: Session) -> Task | None:
+    """Getting Task entity instance by id if `id`==`git` else None"""
     return session.query(Task).filter(Task.id == gid).first()
 
 
@@ -52,7 +54,8 @@ def is_task_completed_today(due_on: str, start_on: str):
     )
 
 
-def check_last_polling_session(file_path: str):
+def check_last_polling_session(file_path: str) -> bool:
+    """Check last polling end time"""
     file_exist = os.path.exists(file_path)
     if file_exist:
         with open(file_path, "r") as file:
