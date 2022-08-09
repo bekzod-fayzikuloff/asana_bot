@@ -26,9 +26,9 @@ def main() -> None:
         Job which polling in scheduler for observe company workspaces
         """
         service.start_scan()
-
         with open("last_check.json", "w+") as file:
             file.write(json.dumps({"last_check": datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")}))
+        print("End of Job")
 
     schedule_polling()
 

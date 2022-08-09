@@ -22,10 +22,9 @@ class ScanService:
 
     def polling(self, session=Session):
         tasks = self.client.get_workspaces_tasks()  # getting common workspaces
-
         for task in tasks:
             # When task already in store(already checked) `skip this loop`
-            if get_task_by_gid(gid=str(task["gid"]), session=session) is None:
+            if get_task_by_gid(gid=str(task["gid"]), session=session) is not None:
                 continue
 
             task_due_on = task.get("due_on")
